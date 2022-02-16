@@ -1,0 +1,55 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Make an account</h1>
+
+<label>Name</label> <br />
+<input type='text' @bind=newAccountName /> <br />
+<button @onclick="makeAccount">Make Account</button> <br />
+<button @onclick="saveAccounts">Save Accounts</button> <br />
+
+<h1>Account List</h1>
+@if (accounts.Count == 0)
+{
+    <p>No accounts in list.</p>
+}
+@foreach (var account in accounts)
+{
+    <p>@account.Name: @account.Balance.ToString("c")</p>
+}
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        foreach(var line in File.ReadAllLines("accounts.txt"))
+        {
+            var account = new CheckingAccount(line, CheckingAccountLevel.Standard);
+            accounts.Add(account);
+        }        
+    }
+
+    string newAccountName;
+    List<Account> accounts = new();
+
+    private void makeAccount()
+    {
+        var newAccount = new CheckingAccount(newAccountName, CheckingAccountLevel.HighRoller);
+        accounts.Add(newAccount);
+        newAccountName = null;
+    }
+
+    private void saveAccounts()
+    {
+        using (var writer = new StreamWriter("accounts.txt"))
+        {
+            foreach (var account in accounts)
+            {
+                writer.WriteLine(account.Name);
+                writer.WriteLine(account.Balance);
+            }
+            writer.Close();
+        }
+    }
+}
