@@ -4,14 +4,28 @@
 
 <h1>Account File Contents</h1>
 
-<button class="btn btn-primary" @onclick="showAccounts">Show Accounts</button>
-<p>@contents</p>
+<button class="btn btn-primary" @onclick="showAccounts">Show Accounts</button> <br />
+
+@if (contents == null)
+{
+    <p>Account list not loaded.</p>
+}
+else
+{
+    foreach (var line in contents)
+    {
+        @line <br />
+    }
+}
 
 @code {
-    string contents;
+    string[] contents;
 
     private void showAccounts()
     {
-        contents = File.ReadAllText("accounts.txt");
+        if (File.Exists("accounts.txt"))
+        {
+            contents = File.ReadAllLines("accounts.txt");
+        }
     }
 }
