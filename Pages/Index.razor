@@ -7,7 +7,7 @@
 <label>Name</label> <br />
 <input type='text' @bind=newAccountName /> <br />
 <button @onclick="makeCheckingAccount">Make Checking Account</button><button @onclick="makeSavingsAccount">Make Savings Account</button> <br />
-<button @onclick="saveAccounts">Save Accounts</button> <br />
+<button @onclick="saveAccounts">Save Accounts</button> <button @onclick="Undo">Undo</button> <br />
 
 <h1>Account List</h1>
 @if (accounts.Count == 0)
@@ -54,5 +54,10 @@
             }
             writer.Close();
         }
+    }
+
+    private void Undo()
+    {
+        accounts.RemoveAt(accounts.Count - 1);
     }
 }
