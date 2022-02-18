@@ -1,10 +1,8 @@
-﻿@page "/counter"
+﻿@page "/accountfile"
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>View Account File</PageTitle>
 
 <h1>Account File Contents</h1>
-
-<button class="btn btn-primary" @onclick="showAccounts">Show Accounts</button> <br />
 
 @if (contents == null)
 {
@@ -21,7 +19,7 @@ else
 @code {
     string[] contents;
 
-    private void showAccounts()
+    protected override void OnInitialized()
     {
         if (File.Exists("accounts.txt"))
         {

@@ -6,7 +6,7 @@
 
 <label>Name</label> <br />
 <input type='text' @bind=newAccountName /> <br />
-<button @onclick="makeAccount">Make Account</button> <br />
+<button @onclick="makeCheckingAccount">Make Checking Account</button><button @onclick="makeSavingsAccount">Make Savings Account</button> <br />
 <button @onclick="saveAccounts">Save Accounts</button> <br />
 
 <h1>Account List</h1>
@@ -25,37 +25,22 @@
     {
         if (File.Exists("accounts.txt"))
         {
-            var accountName = "";
-            var balance = 0M;
-            CheckingAccountLevel accountLevel;
-            foreach (var line in File.ReadAllLines("accounts.txt"))
-            {
-                var parts = line.Split(':');
-                if(parts[0] == "Name")
-                {
-                    accountName = parts[1];
-                }
-                else if(parts[0] == "Balance")
-                {
-                    balance = decimal.Parse(parts[1]);
-                }
-                else if(parts[0] == "AccountLevel")
-                {                    
-                    accountLevel = (CheckingAccountLevel)Enum.Parse(typeof(CheckingAccountLevel), parts[1]);
-                    var account = new CheckingAccount(accountName, accountLevel);
-                    accounts.Add(account);
-                }
-            }
+            accounts = Account.Load("accounts.txt");
         }
     }
 
     string newAccountName;
     List<Account> accounts = new();
 
-    private void makeAccount()
+    private void makeCheckingAccount()
     {
-        var newAccount = new CheckingAccount(newAccountName, CheckingAccountLevel.HighRoller);
-        accounts.Add(newAccount);
+        accounts.Add(new CheckingAccount(newAccountName, CheckingAccountLevel.HighRoller));
+        newAccountName = null;
+    }
+
+    private void makeSavingsAccount()
+    {
+        accounts.Add(new SavingsAccount(newAccountName));
         newAccountName = null;
     }
 
